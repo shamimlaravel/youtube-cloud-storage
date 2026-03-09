@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Cloud Storage - Documentation</title>
+    
+    <!-- Preconnect to CDNs -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://unpkg.com">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/app.css">
+    
+    <!-- Custom JS -->
+    <script src="assets/app.js"></script>
+</head>
+<body class="bg-gray-50 text-gray-900" x-data="{ sidebarOpen: false, activeSection: 'overview' }">
+
+    <!-- Mobile Header -->
+    <header class="lg:hidden bg-white shadow-sm sticky top-0 z-50">
+        <div class="flex items-center justify-between px-4 py-3">
+            <button @click="sidebarOpen = !sidebarOpen" class="text-gray-600 hover:text-gray-900">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+            </button>
+            <h1 class="text-lg font-bold text-primary">YT Storage</h1>
+            <div class="w-6"></div>
+        </div>
+    </header>
+
+    <div class="flex min-h-screen">
+        <!-- Sidebar Navigation -->
+        <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" 
+               class="fixed inset-y-0 left-0 z-40 w-64 bg-white shadow-lg transform transition-transform duration-300 lg:translate-x-0 lg:static lg:shadow-none lg:w-72 overflow-y-auto scrollbar-thin">
+            
+            <!-- Logo -->
+            <div class="p-6 border-b border-gray-200">
+                <h1 class="text-2xl font-bold text-primary flex items-center gap-2">
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                    </svg>
+                    YT Storage
+                </h1>
+                <p class="text-xs text-gray-500 mt-1">v0.2.0-beta</p>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="p-4 space-y-1">
+                <a href="#overview" 
+                   @click.prevent="activeSection = 'overview'; sidebarOpen = false"
+                   :class="activeSection === 'overview' ? 'bg-red-50 text-primary' : 'text-gray-700 hover:bg-gray-100'"
+                   class="block px-4 py-2 rounded-lg font-medium transition-colors">
+                    📋 Overview
+                </a>
+                
+                <a href="#installation" 
+                   @click.prevent="activeSection = 'installation'; sidebarOpen = false"
+                   :class="activeSection === 'installation' ? 'bg-red-50 text-primary' : 'text-gray-700 hover:bg-gray-100'"
+                   class="block px-4 py-2 rounded-lg font-medium transition-colors">
+                    ⚙️ Installation
+                </a>
+                
+                <a href="#setup" 
+                   @click.prevent="activeSection = 'setup'; sidebarOpen = false"
+                   :class="activeSection === 'setup' ? 'bg-red-50 text-primary' : 'text-gray-700 hover:bg-gray-100'"
+                   class="block px-4 py-2 rounded-lg font-medium transition-colors">
+                    🚀 Quick Setup
+                </a>
+                
+                <a href="#usage" 
+                   @click.prevent="activeSection = 'usage'; sidebarOpen = false"
+                   :class="activeSection === 'usage' ? 'bg-red-50 text-primary' : 'text-gray-700 hover:bg-gray-100'"
+                   class="block px-4 py-2 rounded-lg font-medium transition-colors">
+                    💾 Usage
+                </a>
+                
+                <a href="#architecture" 
+                   @click.prevent="activeSection = 'architecture'; sidebarOpen = false"
+                   :class="activeSection === 'architecture' ? 'bg-red-50 text-primary' : 'text-gray-700 hover:bg-gray-100'"
+                   class="block px-4 py-2 rounded-lg font-medium transition-colors">
+                    🏗️ Architecture
+                </a>
+                
+                <a href="#workflow" 
+                   @click.prevent="activeSection = 'workflow'; sidebarOpen = false"
+                   :class="activeSection === 'workflow' ? 'bg-red-50 text-primary' : 'text-gray-700 hover:bg-gray-100'"
+                   class="block px-4 py-2 rounded-lg font-medium transition-colors">
+                    📊 Workflow Diagram
+                </a>
+                
+                <a href="#api-reference" 
+                   @click.prevent="activeSection = 'api-reference'; sidebarOpen = false"
+                   :class="activeSection === 'api-reference' ? 'bg-red-50 text-primary' : 'text-gray-700 hover:bg-gray-100'"
+                   class="block px-4 py-2 rounded-lg font-medium transition-colors">
+                    📖 API Reference
+                </a>
+                
+                <a href="#troubleshooting" 
+                   @click.prevent="activeSection = 'troubleshooting'; sidebarOpen = false"
+                   :class="activeSection === 'troubleshooting' ? 'bg-red-50 text-primary' : 'text-gray-700 hover:bg-gray-100'"
+                   class="block px-4 py-2 rounded-lg font-medium transition-colors">
+                    🛠 Troubleshooting
+                </a>
+                
+                <a href="#faq" 
+                   @click.prevent="activeSection = 'faq'; sidebarOpen = false"
+                   :class="activeSection === 'faq' ? 'bg-red-50 text-primary' : 'text-gray-700 hover:bg-gray-100'"
+                   class="block px-4 py-2 rounded-lg font-medium transition-colors">
+                    ❓ FAQ
+                </a>
+            </nav>
+
+            <!-- GitHub Link -->
+            <div class="p-4 mt-4 border-t border-gray-200">
+                <a href="https://github.com/shamimstack/youtube-cloud-storage" 
+                   target="_blank"
+                   class="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+                    </svg>
+                    GitHub
+                </a>
+            </div>
+        </aside>
+
+        <!-- Overlay for mobile -->
+        <div x-show="sidebarOpen" @click="sidebarOpen = false" x-cloak
+             class="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"></div>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6 lg:p-12 overflow-x-hidden">
+            
+            <!-- Overview Section -->
+            <section id="overview" x-show="activeSection === 'overview'" x-transition.opacity>
+                <h1 class="text-4xl font-bold mb-6 text-gray-900">YouTube Cloud Storage</h1>
+                <p class="text-xl text-gray-600 mb-8">Transform YouTube into unlimited cloud storage using steganography and fountain codes.</p>
+                
+                <div class="grid md:grid-cols-3 gap-6 mb-12">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <div class="text-3xl mb-3">🔒</div>
+                        <h3 class="font-bold text-lg mb-2">Steganographic Encoding</h3>
+                        <p class="text-gray-600">Hide data in DCT coefficient signs, invisible to viewers and compression.</p>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <div class="text-3xl mb-3">📦</div>
+                        <h3 class="font-bold text-lg mb-2">Fountain Code Redundancy</h3>
+                        <p class="text-gray-600">Wirehair O(N) erasure coding recovers from YouTube's video compression.</p>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <div class="text-3xl mb-3">⚡</div>
+                        <h3 class="font-bold text-lg mb-2">Zero-Config Setup</h3>
+                        <p class="text-gray-600">Auto-detects FFmpeg, yt-dlp, and compiles Wirehair if needed.</p>
+                    </div>
+                </div>
+
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-lg mb-8">
+                    <h2 class="font-bold text-lg mb-2 text-blue-900">✨ Key Features</h2>
+                    <ul class="space-y-2 text-blue-800">
+                        <li>✓ Unlimited storage via private YouTube videos</li>
+                        <li>✓ Laravel Flysystem integration (use like any disk)</li>
+                        <li>✓ Cross-platform support (Windows, Linux, macOS)</li>
+                        <li>✓ Artisan commands for CLI operations</li>
+                        <li>✓ PHP 8.4+ with modern features</li>
+                    </ul>
+                </div>
+
+                <div class="flex gap-4">
+                    <a href="#installation" @click.prevent="activeSection = 'installation'" 
+                       class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-lg hover:bg-red-700 transition-colors font-semibold">
+                        Get Started →
+                    </a>
+                    <a href="https://github.com/shamimstack/youtube-cloud-storage" target="_blank"
+                       class="inline-flex items-center gap-2 px-6 py-3 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors font-semibold">
+                        View on GitHub
+                    </a>
+                </div>
+            </section>
+
+            <!-- Installation Section -->
+            <section id="installation" x-show="activeSection === 'installation'" x-transition.opacity x-cloak>
+                <h1 class="text-4xl font-bold mb-6 text-gray-900">Installation</h1>
+                
+                <div class="prose max-w-none">
+                    <h2 class="text-2xl font-bold mb-4">Requirements</h2>
+                    <ul class="list-disc list-inside space-y-2 mb-6 text-gray-700">
+                        <li>PHP 8.4 or higher</li>
+                        <li>Laravel 12 or higher</li>
+                        <li>FFI extension enabled</li>
+                        <li>GD extension for image processing</li>
+                        <li>FFmpeg (for video encoding/decoding)</li>
+                        <li>yt-dlp (for YouTube uploads)</li>
+                    </ul>
+
+                    <h2 class="text-2xl font-bold mb-4 mt-8">Install Package</h2>
+                    <pre><code>composer require shamimstack/youtube-cloud-storage</code></pre>
+
+                    <h2 class="text-2xl font-bold mb-4 mt-8">Publish Configuration</h2>
+                    <pre><code>php artisan vendor:publish --provider="Shamimstack\YouTubeCloudStorage\YTStorageServiceProvider" --tag=config</code></pre>
+
+                    <div class="bg-yellow-50 border-l-4 border-yellow-500 p-6 rounded-r-lg mt-6">
+                        <h3 class="font-bold text-lg mb-2 text-yellow-900">⚠️ Note</h3>
+                        <p class="text-yellow-800">The package requires system binaries (FFmpeg, yt-dlp). Run the setup wizard for automatic configuration.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Setup Section -->
+            <section id="setup" x-show="activeSection === 'setup'" x-transition.opacity x-cloak>
+                <h1 class="text-4xl font-bold mb-6 text-gray-900">Quick Setup</h1>
+                
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold mb-4">Interactive Setup Wizard</h2>
+                    <p class="text-gray-700 mb-4">The easiest way to configure the package is using the interactive setup:</p>
+                    <pre><code>php artisan yt:setup</code></pre>
+                    
+                    <p class="text-gray-700 mt-4">This will:</p>
+                    <ol class="list-decimal list-inside space-y-2 text-gray-700 mt-2">
+                        <li>Auto-detect system binaries (FFmpeg, FFprobe, yt-dlp)</li>
+                        <li>Compile Wirehair from source if needed</li>
+                        <li>Validate all dependencies via health check</li>
+                        <li>Prompt for YouTube OAuth credentials</li>
+                        <li>Write configuration to your .env file</li>
+                    </ol>
+                </div>
+
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold mb-4">Manual Configuration</h2>
+                    <p class="text-gray-700 mb-4">Add these variables to your <code>.env</code> file:</p>
+                    <pre><code>FFMPEG_PATH=/usr/bin/ffmpeg
+FFPROBE_PATH=/usr/bin/ffprobe
+YTDLP_PATH=/usr/bin/yt-dlp
+YOUTUBE_API_KEY=your_api_key_here
+YOUTUBE_CLIENT_ID=your_client_id_here
+YOUTUBE_CLIENT_SECRET=your_client_secret_here
+YOUTUBE_REFRESH_TOKEN=your_refresh_token_here</code></pre>
+                </div>
+
+                <div class="bg-green-50 border-l-4 border-green-500 p-6 rounded-r-lg">
+                    <h3 class="font-bold text-lg mb-2 text-green-900">✅ Setup Complete!</h3>
+                    <p class="text-green-800">You're now ready to upload files to YouTube!</p>
+                </div>
+            </section>
+
+            <!-- Usage Section -->
+            <section id="usage" x-show="activeSection === 'usage'" x-transition.opacity x-cloak>
+                <h1 class="text-4xl font-bold mb-6 text-gray-900">Usage</h1>
+                
+                <div class="space-y-8">
+                    <div>
+                        <h2 class="text-2xl font-bold mb-4">Via Storage Facade</h2>
+                        <pre><code>use Illuminate\Support\Facades\Storage;
+
+// Upload a file
+$disk = Storage::disk('youtube');
+$disk->put('backup.zip', file_get_contents('/path/to/file.zip'));
+
+// Download a file
+$data = $disk->get('backup.zip');
+file_put_contents('/tmp/restored.zip', $data);
+
+// List files
+$files = $disk->allFiles();
+
+// Delete a file
+$disk->delete('backup.zip');</code></pre>
+                    </div>
+
+                    <div>
+                        <h2 class="text-2xl font-bold mb-4">Via Artisan Commands</h2>
+                        
+                        <h3 class="text-lg font-semibold mb-2">Upload Files</h3>
+                        <pre><code># Basic upload
+php artisan yt:store /path/to/file.pdf
+
+# With custom redundancy
+php artisan yt:store /path/to/file.zip --redundancy=2.0
+
+# With metadata
+php artisan yt:store image.png \
+  --title="My Image" \
+  --description="Uploaded via YTStorage" \
+  --privacy=private</code></pre>
+
+                        <h3 class="text-lg font-semibold mb-2 mt-6">Download Files</h3>
+                        <pre><code># Restore from YouTube URL
+php artisan yt:restore "https://youtube.com/watch?v=dQw4w9WgXcQ"
+
+# Specify output path
+php artisan yt:restore "URL" --output=/tmp/restored.pdf</code></pre>
+                    </div>
+
+                    <div>
+                        <h2 class="text-2xl font-bold mb-4">Programmatic Access</h2>
+                        <pre><code>use Shamimstack\YouTubeCloudStorage\Engines\EncoderEngine;
+
+// Encode and upload
+$engine = app(EncoderEngine::class);
+$result = $engine->encodeAndUpload(
+    filePath: '/path/to/file.pdf',
+    title: 'My Document',
+    description: 'Encoded with DCT steganography',
+    privacyStatus: 'private',
+);
+
+echo "Uploaded to: {$result['videoUrl']}\n";</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Architecture Section -->
+            <section id="architecture" x-show="activeSection === 'architecture'" x-transition.opacity x-cloak>
+                <h1 class="text-4xl font-bold mb-6 text-gray-900">Architecture</h1>
+                
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold mb-4">How It Works</h2>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-6">
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-4">
+                                <div class="flex-shrink-0 w-8 h-8 bg-red-100 rounded-full flex items-center justify-center text-primary font-bold">1</div>
+                                <div>
+                                    <h3 class="font-bold mb-1">Original File</h3>
+                                    <p class="text-gray-600">Your document, image, or archive file</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center gap-4 ml-4">
+                                <div class="flex-shrink-0 w-0.5 h-8 bg-gray-300"></div>
+                                <div class="text-gray-400">↓</div>
+                            </div>
+                            
+                            <div class="flex items-start gap-4">
+                                <div class="flex-shrink-0 w-8 h-8 bg-red-100 rounded-full flex items-center justify-center text-primary font-bold">2</div>
+                                <div>
+                                    <h3 class="font-bold mb-1">Wirehair Fountain Encoder</h3>
+                                    <p class="text-gray-600">Splits into N packets + M redundant packets. Any N + 2% can recover original.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center gap-4 ml-4">
+                                <div class="flex-shrink-0 w-0.5 h-8 bg-gray-300"></div>
+                                <div class="text-gray-400">↓</div>
+                            </div>
+                            
+                            <div class="flex items-start gap-4">
+                                <div class="flex-shrink-0 w-8 h-8 bg-red-100 rounded-full flex items-center justify-center text-primary font-bold">3</div>
+                                <div>
+                                    <h3 class="font-bold mb-1">DCT Sign-Bit Embedding</h3>
+                                    <p class="text-gray-600">Convert packets to bitstream, generate video frames, embed bits in DCT coefficient signs (positive=0, negative=1)</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center gap-4 ml-4">
+                                <div class="flex-shrink-0 w-0.5 h-8 bg-gray-300"></div>
+                                <div class="text-gray-400">↓</div>
+                            </div>
+                            
+                            <div class="flex items-start gap-4">
+                                <div class="flex-shrink-0 w-8 h-8 bg-red-100 rounded-full flex items-center justify-center text-primary font-bold">4</div>
+                                <div>
+                                    <h3 class="font-bold mb-1">FFmpeg Video Encoding</h3>
+                                    <p class="text-gray-600">RGB24 raw frames → H.264/FFV1 video, uploaded to YouTube as private video</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold mb-4">Mathematical Foundation</h2>
+                    
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <h3 class="font-bold mb-3">Discrete Cosine Transform</h3>
+                        <pre><code>Forward DCT:  F = T · B · T^T
+Inverse DCT:  B = T^T · F · T
+
+Where:
+- B = 8×8 pixel block
+- F = 8×8 frequency coefficients
+- T = DCT basis matrix (orthonormal)</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- API Reference Section -->
+            <section id="api-reference" x-show="activeSection === 'api-reference'" x-transition.opacity x-cloak>
+                <h1 class="text-4xl font-bold mb-6 text-gray-900">API Reference</h1>
+                
+                <div class="space-y-6">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <h2 class="text-xl font-bold mb-3">AutoConfigurator</h2>
+                        <p class="text-gray-600 mb-4">Auto-detects system binaries and compiles Wirehair.</p>
+                        <pre><code>$autoConfig = app(AutoConfigurator::class);
+$result = $autoConfig->runAutoConfig();
+
+if ($result['allFound']) {
+    echo "FFmpeg: {$result['ffmpeg']}\n";
+    echo "Wirehair: {$result['wirehair']}\n";
+}</code></pre>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <h2 class="text-xl font-bold mb-3">HealthCheck</h2>
+                        <p class="text-gray-600 mb-4">Validates all runtime prerequisites.</p>
+                        <pre><code>$healthCheck = app(HealthCheck::class);
+$report = $healthCheck->run();
+
+if (!$report['passed']) {
+    foreach ($report['checks'] as $check) {
+        if (!$check['passed']) {
+            echo "Failed: {$check['name']}\n";
+        }
+    }
+}</code></pre>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <h2 class="text-xl font-bold mb-3">EncoderEngine</h2>
+                        <p class="text-gray-600 mb-4">Pipeline coordinator for encode/upload and download/decode.</p>
+                        <pre><code>$engine = app(EncoderEngine::class);
+
+// Upload
+$result = $engine->encodeAndUpload(
+    filePath: '/path/to/file.pdf',
+    title: 'Document',
+    privacyStatus: 'private',
+);
+
+// Download
+$decodedPath = $engine->downloadAndDecode(
+    videoUrl: 'https://youtube.com/watch?v=...',
+    outputPath: '/tmp/output.pdf',
+);</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Troubleshooting Section -->
+            <section id="troubleshooting" x-show="activeSection === 'troubleshooting'" x-transition.opacity x-cloak>
+                <h1 class="text-4xl font-bold mb-6 text-gray-900">Troubleshooting</h1>
+                
+                <div class="space-y-6">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <h2 class="text-xl font-bold mb-3 text-red-600">FFmpeg Not Found</h2>
+                        <pre><code># Ubuntu/Debian
+sudo apt-get install ffmpeg
+
+# macOS
+brew install ffmpeg
+
+# Windows
+choco install ffmpeg</code></pre>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <h2 class="text-xl font-bold mb-3 text-orange-600">Wirehair Compilation Failed</h2>
+                        <pre><code># Install build tools
+sudo apt-get install gcc cmake  # Linux
+brew install cmake             # macOS</code></pre>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <h2 class="text-xl font-bold mb-3 text-blue-600">YouTube API Quota Exceeded</h2>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li>Use private videos (don't count against public quota)</li>
+                            <li>Wait 24 hours for quota reset</li>
+                            <li>Request quota increase from Google</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <h2 class="text-xl font-bold mb-3 text-green-600">Run Diagnostics</h2>
+                        <pre><code>php artisan yt:setup --no-interaction</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Workflow Diagram Section -->
+            <section id="workflow" x-show="activeSection === 'workflow'" x-transition.opacity x-cloak>
+                <h1 class="text-4xl font-bold mb-6 text-gray-900">Workflow Diagram</h1>
+                
+                <div class="mb-8">
+                    <p class="text-xl text-gray-600 mb-8">Visual representation of the complete steganographic encoding process using DCT coefficients and Wirehair fountain codes.</p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 mb-8">
+                        <div class="bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-xl shadow-sm border border-blue-200">
+                            <h2 class="text-2xl font-bold mb-4 text-blue-900">📤 Upload Process</h2>
+                            <div class="space-y-3">
+                                <div class="flex items-center gap-3">
+                                    <span class="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm">1</span>
+                                    <span class="text-gray-800">Original File → Wirehair Encoder</span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm">2</span>
+                                    <span class="text-gray-800">N + M Packets Generated</span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm">3</span>
+                                    <span class="text-gray-800">Convert to Bitstream</span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm">4</span>
+                                    <span class="text-gray-800">Generate Video Frames</span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm">5</span>
+                                    <span class="text-gray-800">DCT Sign-Bit Embedding</span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm">6</span>
+                                    <span class="text-gray-800">FFmpeg Video Encoding</span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm">7</span>
+                                    <span class="text-gray-800">YouTube API Upload</span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="flex-shrink-0 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center font-bold text-sm">✓</span>
+                                    <span class="text-gray-800">Private Video on YouTube</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gradient-to-br from-green-50 to-teal-50 p-6 rounded-xl shadow-sm border border-green-200">
+                            <h2 class="text-2xl font-bold mb-4 text-green-900">📥 Download Process</h2>
+                            <div class="space-y-3">
+                                <div class="flex items-center gap-3">
+                                    <span class="flex-shrink-0 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center font-bold text-sm">1</span>
+                                    <span class="text-gray-800">YouTube Video URL</span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="flex-shrink-0 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center font-bold text-sm">2</span>
+                                    <span class="text-gray-800">yt-dlp Download</span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="flex-shrink-0 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center font-bold text-sm">3</span>
+                                    <span class="text-gray-800">Extract Raw Frames</span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="flex-shrink-0 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center font-bold text-sm">4</span>
+                                    <span class="text-gray-800">DCT Coefficient Analysis</span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="flex-shrink-0 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center font-bold text-sm">5</span>
+                                    <span class="text-gray-800">Read Sign Bits</span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="flex-shrink-0 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center font-bold text-sm">6</span>
+                                    <span class="text-gray-800">Reconstruct Bitstream</span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="flex-shrink-0 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center font-bold text-sm">7</span>
+                                    <span class="text-gray-800">Wirehair Decoder</span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="flex-shrink-0 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center font-bold text-sm">✓</span>
+                                    <span class="text-gray-800">Restored Original File</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-200">
+                        <h2 class="text-2xl font-bold mb-6">🔬 Technical Deep Dive: DCT Steganography</h2>
+                        
+                        <div class="grid md:grid-cols-3 gap-6">
+                            <div class="md:col-span-2">
+                                <h3 class="font-bold text-lg mb-3">Discrete Cosine Transform</h3>
+                                <pre class="text-sm"><code>Forward DCT:  F = T · B · T^T
+Inverse DCT:  B = T^T · F · T
+
+Where:
+- B = 8×8 pixel block
+- F = 8×8 frequency coefficients
+- T = DCT basis matrix (orthonormal)</code></pre>
+                                
+                                <h3 class="font-bold text-lg mt-6 mb-3">Sign-Bit Embedding Process</h3>
+                                <ul class="space-y-2 text-gray-700">
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-primary font-bold">•</span>
+                                        <span><strong>Bit 0:</strong> Make coefficient positive (sign = +)</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-primary font-bold">•</span>
+                                        <span><strong>Bit 1:</strong> Make coefficient negative (sign = -)</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-primary font-bold">•</span>
+                                        <span><strong>Threshold:</strong> Only embed in coefficients with magnitude > threshold</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-primary font-bold">•</span>
+                                        <span><strong>Robustness:</strong> Survives H.264 compression and transcoding</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div class="bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-lg border border-purple-200">
+                                <h4 class="font-bold mb-3 text-purple-900">📦 Fountain Codes</h4>
+                                <p class="text-sm text-gray-700 mb-4">Wirehair creates systematic and repair packets using O(N) erasure coding.</p>
+                                <ul class="space-y-2 text-sm text-gray-700">
+                                    <li>✓ Any N + 2% packets recover original</li>
+                                    <li>✓ Configurable redundancy (default: 1.5x)</li>
+                                    <li>✓ CRC32 integrity verification</li>
+                                    <li>✓ Resistant to packet loss</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-lg">
+                        <h3 class="font-bold text-lg mb-2 text-blue-900">💡 Key Innovation</h3>
+                        <p class="text-blue-800">The combination of Wirehair fountain codes (for redundancy) and DCT steganography (for invisibility) creates a robust storage system that survives YouTube's aggressive video compression while remaining completely invisible to viewers.</p>
+                    </div>
+                </div>
+                
+                <div class="mt-8 text-center">
+                    <a href="workflow-visualization.html" target="_blank"
+                       class="inline-flex items-center gap-2 px-8 py-4 bg-primary text-white rounded-lg hover:bg-red-700 transition-colors font-semibold shadow-lg">
+                        🎨 View Interactive Visualization
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                        </svg>
+                    </a>
+                </div>
+            </section>
+
+            <!-- FAQ Section -->
+            <section id="faq" x-show="activeSection === 'faq'" x-transition.opacity x-cloak>
+                <h1 class="text-4xl font-bold mb-6 text-gray-900">FAQ</h1>
+                
+                <div class="space-y-4" x-data="{ selected: null }">
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                        <button @click="selected = selected === 1 ? null : 1" 
+                                class="w-full px-6 py-4 text-left font-semibold hover:bg-gray-50 flex justify-between items-center">
+                            <span>Is this legal?</span>
+                            <span x-text="selected === 1 ? '−' : '+'" class="text-2xl"></span>
+                        </button>
+                        <div x-show="selected === 1" x-collapse class="px-6 pb-4 text-gray-700">
+                            <p>Yes! You're uploading your own files to your own YouTube account as private videos. This falls under fair use of the YouTube API for personal storage.</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                        <button @click="selected = selected === 2 ? null : 2" 
+                                class="w-full px-6 py-4 text-left font-semibold hover:bg-gray-50 flex justify-between items-center">
+                            <span>How much data can I store?</span>
+                            <span x-text="selected === 2 ? '−' : '+'" class="text-2xl"></span>
+                        </button>
+                        <div x-show="selected === 2" x-collapse class="px-6 pb-4 text-gray-700">
+                            <p>YouTube allows unlimited private video uploads (subject to daily upload limits). Each video can store several MB of data depending on duration and quality settings.</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                        <button @click="selected = selected === 3 ? null : 3" 
+                                class="w-full px-6 py-4 text-left font-semibold hover:bg-gray-50 flex justify-between items-center">
+                            <span>Is my data secure?</span>
+                            <span x-text="selected === 3 ? '−' : '+'" class="text-2xl"></span>
+                        </button>
+                        <div x-show="selected === 3" x-collapse class="px-6 pb-4 text-gray-700">
+                            <p>Data is hidden invisibly in video frames using steganography. For encryption, consider implementing AES-256 encryption before encoding (planned feature).</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                        <button @click="selected = selected === 4 ? null : 4" 
+                                class="w-full px-6 py-4 text-left font-semibold hover:bg-gray-50 flex justify-between items-center">
+                            <span>Can YouTube detect this?</span>
+                            <span x-text="selected === 4 ? '−' : '+'" class="text-2xl"></span>
+                        </button>
+                        <div x-show="selected === 4" x-collapse class="px-6 pb-4 text-gray-700">
+                            <p>The data is embedded in DCT coefficients which survive compression but are not visible to viewers. YouTube's systems treat these as normal videos.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-12 py-8">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="text-gray-600 text-sm">
+                    © 2026 Shamim Stack. MIT License.
+                </div>
+                <div class="flex gap-6 text-sm text-gray-600">
+                    <a href="https://github.com/shamimstack/youtube-cloud-storage" target="_blank" class="hover:text-primary">GitHub</a>
+                    <a href="https://packagist.org/packages/shamimstack/youtube-cloud-storage" target="_blank" class="hover:text-primary">Packagist</a>
+                    <a href="https://laravel.com" target="_blank" class="hover:text-primary">Laravel</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

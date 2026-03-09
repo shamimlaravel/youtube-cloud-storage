@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Cloud Storage - Workflow Visualization</title>
+    
+    <!-- Preconnect to CDNs -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/app.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #FF0000 0%, #cc0000 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .workflow-container {
+            padding: 3rem;
+        }
+        
+        .phase {
+            margin-bottom: 4rem;
+        }
+        
+        .phase-title {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 4px solid #FF0000;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .phase-icon {
+            font-size: 2.5rem;
+        }
+        
+        .process-flow {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: space-between;
+            align-items: center;
+            margin: 2rem 0;
+        }
+        
+        .step {
+            flex: 1;
+            min-width: 200px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+        
+        .step:hover {
+            transform: translateY(-5px);
+        }
+        
+        .step-number {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .step-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .step-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .step-description {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .arrow {
+            font-size: 3rem;
+            color: #FF0000;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.1); }
+        }
+        
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .component-card {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            border-left: 5px solid #333;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .component-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+        
+        .component-description {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        
+        .component-details {
+            background: rgba(255,255,255,0.7);
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .data-flow-diagram {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 3rem 0;
+            overflow-x: auto;
+        }
+        
+        .flow-step {
+            display: inline-block;
+            background: white;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            border: 2px solid #FF0000;
+            margin: 0.5rem;
+            font-weight: bold;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .metrics-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 3rem 0;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .metrics-table th {
+            background: #FF0000;
+            color: white;
+            padding: 1.5rem;
+            text-align: left;
+            font-weight: bold;
+        }
+        
+        .metrics-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .metrics-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .metrics-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+        
+        @media (max-width: 768px) {
+            .process-flow {
+                flex-direction: column;
+            }
+            
+            .arrow {
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎬 YouTube Cloud Storage</h1>
+            <p class="subtitle">Complete Workflow Visualization - From File to Video and Back</p>
+        </header>
+        
+        <div class="workflow-container">
+            <!-- Upload Phase -->
+            <div class="phase">
+                <h2 class="phase-title">
+                    <span class="phase-icon">📤</span>
+                    Phase 1: Upload Process (File → YouTube Video)
+                </h2>
+                
+                <div class="process-flow">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-icon">📄</div>
+                        <div class="step-title">Original File</div>
+                        <div class="step-description">PDF, ZIP, or any file format</div>
+                    </div>
+                    
+                    <div class="arrow">→</div>
+                    
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-icon">🔧</div>
+                        <div class="step-title">Wirehair Encoder</div>
+                        <div class="step-description">Split into N + M packets with fountain codes</div>
+                    </div>
+                    
+                    <div class="arrow">→</div>
+                    
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-icon">🔢</div>
+                        <div class="step-title">Bitstream</div>
+                        <div class="step-description">Convert packets to binary sequence</div>
+                    </div>
+                    
+                    <div class="arrow">→</div>
+                    
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-icon">🎨</div>
+                        <div class="step-title">Video Frames</div>
+                        <div class="step-description">Generate RGB24 frames for embedding</div>
+                    </div>
+                </div>
+                
+                <div class="process-flow">
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <div class="step-icon">🔬</div>
+                        <div class="step-title">DCT Embedding</div>
+                        <div class="step-description">Hide bits in coefficient signs (positive=0, negative=1)</div>
+                    </div>
+                    
+                    <div class="arrow">→</div>
+                    
+                    <div class="step">
+                        <div class="step-number">6</div>
+                        <div class="step-icon">🎬</div>
+                        <div class="step-title">FFmpeg Encoding</div>
+                        <div class="step-description">RGB24 → H.264/FFV1 video</div>
+                    </div>
+                    
+                    <div class="arrow">→</div>
+                    
+                    <div class="step">
+                        <div class="step-number">7</div>
+                        <div class="step-icon">📤</div>
+                        <div class="step-title">YouTube Upload</div>
+                        <div class="step-description">Upload via YouTube Data API v3</div>
+                    </div>
+                    
+                    <div class="arrow">→</div>
+                    
+                    <div class="step">
+                        <div class="step-number">8</div>
+                        <div class="step-icon">✅</div>
+                        <div class="step-title">Private Video</div>
+                        <div class="step-description">Stored on YouTube as unlisted/private</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Download Phase -->
+            <div class="phase">
+                <h2 class="phase-title">
+                    <span class="phase-icon">📥</span>
+                    Phase 2: Download Process (YouTube Video → File)
+                </h2>
+                
+                <div class="process-flow">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-icon">🔗</div>
+                        <div class="step-title">Video URL</div>
+                        <div class="step-description">YouTube video link</div>
+                    </div>
+                    
+                    <div class="arrow">→</div>
+                    
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-icon">📥</div>
+                        <div class="step-title">yt-dlp Download</div>
+                        <div class="step-description">Download video to local file</div>
+                    </div>
+                    
+                    <div class="arrow">→</div>
+                    
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-icon">🎞️</div>
+                        <div class="step-title">Frame Extraction</div>
+                        <div class="step-description">Extract raw RGB24 frames via FFmpeg</div>
+                    </div>
+                    
+                    <div class="arrow">→</div>
+                    
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-icon">🔍</div>
+                        <div class="step-title">DCT Analysis</div>
+                        <div class="step-description">Analyze coefficient signs per frame</div>
+                    </div>
+                </div>
+                
+                <div class="process-flow">
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <div class="step-icon">💾</div>
+                        <div class="step-title">Bit Recovery</div>
+                        <div class="step-description">Read sign bits (positive→0, negative→1)</div>
+                    </div>
+                    
+                    <div class="arrow">→</div>
+                    
+                    <div class="step">
+                        <div class="step-number">6</div>
+                        <div class="step-icon">🧩</div>
+                        <div class="step-title">Packet Assembly</div>
+                        <div class="step-description">Reconstruct packets from bitstream</div>
+                    </div>
+                    
+                    <div class="arrow">→</div>
+                    
+                    <div class="step">
+                        <div class="step-number">7</div>
+                        <div class="step-icon">🔧</div>
+                        <div class="step-title">Wirehair Decoder</div>
+                        <div class="step-description">Recover original file from N + 2% packets</div>
+                    </div>
+                    
+                    <div class="arrow">→</div>
+                    
+                    <div class="step">
+                        <div class="step-number">8</div>
+                        <div class="step-icon">📄</div>
+                        <div class="step-title">Restored File</div>
+                        <div class="step-description">100% identical to original</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Component Architecture -->
+            <div class="phase">
+                <h2 class="phase-title">
+                    <span class="phase-icon">🏗️</span>
+                    Core Components Architecture
+                </h2>
+                
+                <div class="component-grid">
+                    <div class="component-card">
+                        <div class="component-name">🔧 Wirehair Fountain Codes</div>
+                        <div class="component-description">
+                            O(N) erasure coding library that splits data into systematic and repair packets. 
+                            Any N + 2% packets can recover the original file.
+                        </div>
+                        <div class="component-details">
+                            <strong>Key Features:</strong><br>
+                            • Systematic packet generation<br>
+                            • Repair packet creation via XOR<br>
+                            • CRC32 integrity verification<br>
+                            • Configurable redundancy factor (default: 1.5x)
+                        </div>
+                    </div>
+                    
+                    <div class="component-card">
+                        <div class="component-name">🔬 DCT Steganography</div>
+                        <div class="component-description">
+                            Discrete Cosine Transform embeds data in video frequency coefficients.
+                            Sign-bit manipulation survives YouTube's compression.
+                        </div>
+                        <div class="component-details">
+                            <strong>Mathematical Basis:</strong><br>
+                            • Forward DCT: F = T · B · T^T<br>
+                            • Inverse DCT: B = T^T · F · T<br>
+                            • Sign-bit embedding (positive=0, negative=1)<br>
+                            • Threshold-controlled robustness
+                        </div>
+                    </div>
+                    
+                    <div class="component-card">
+                        <div class="component-name">🎬 FFmpeg Engine</div>
+                        <div class="component-description">
+                            Professional video encoding/decoding pipeline. Handles RGB24 raw frames,
+                            H.264/FFV1 codecs, and streaming processing.
+                        </div>
+                        <div class="component-details">
+                            <strong>Capabilities:</strong><br>
+                            • Raw video pipe streaming<br>
+                            • Lossless FFV1 codec support<br>
+                            • H.264 encoding for compatibility<br>
+                            • Frame extraction via FFprobe
+                        </div>
+                    </div>
+                    
+                    <div class="component-card">
+                        <div class="component-name">🌐 YouTube Integration</div>
+                        <div class="component-description">
+                            OAuth 2.0 authenticated upload/download via YouTube Data API v3.
+                            Manages private videos and metadata.
+                        </div>
+                        <div class="component-details">
+                            <strong>Features:</strong><br>
+                            • Resumable uploads<br>
+                            • Privacy control (unlisted/private)<br>
+                            • Metadata management<br>
+                            • Automatic retry logic
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Data Flow Diagram -->
+            <div class="phase">
+                <h2 class="phase-title">
+                    <span class="phase-icon">📊</span>
+                    Complete Data Flow
+                </h2>
+                
+                <div class="data-flow-diagram">
+                    <center>
+                        <div class="flow-step">📄 Original File</div>
+                        →
+                        <div class="flow-step">🔧 Wirehair Encode</div>
+                        →
+                        <div class="flow-step">📦 N+M Packets</div>
+                        →
+                        <div class="flow-step">🔢 Bitstream</div>
+                        →
+                        <div class="flow-step">🎨 Frames</div>
+                        →
+                        <div class="flow-step">🔬 DCT Embed</div>
+                        →
+                        <div class="flow-step">🎬 FFmpeg</div>
+                        →
+                        <div class="flow-step">📤 YouTube API</div>
+                        →
+                        <div class="flow-step">✅ Private Video</div>
+                        <br><br>
+                        <div class="flow-step">🔗 Video URL</div>
+                        →
+                        <div class="flow-step">📥 yt-dlp</div>
+                        →
+                        <div class="flow-step">🎞️ Extract Frames</div>
+                        →
+                        <div class="flow-step">🔍 DCT Analysis</div>
+                        →
+                        <div class="flow-step">💾 Read Signs</div>
+                        →
+                        <div class="flow-step">🧩 Reassemble</div>
+                        →
+                        <div class="flow-step">🔧 Wirehair Decode</div>
+                        →
+                        <div class="flow-step">📄 Restored File</div>
+                    </center>
+                </div>
+            </div>
+            
+            <!-- Performance Metrics -->
+            <div class="phase">
+                <h2 class="phase-title">
+                    <span class="phase-icon">📈</span>
+                    Performance Metrics
+                </h2>
+                
+                <table class="metrics-table">
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Value</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Encoding Overhead</strong></td>
+                            <td>~1.5x</td>
+                            <td>With default redundancy factor of 1.5</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Recovery Threshold</strong></td>
+                            <td>N + 2%</td>
+                            <td>Minimum packets needed for recovery</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Data Density</strong></td>
+                            <td>~300 bits/frame</td>
+                            <td>Depends on DCT positions configuration</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Video Duration</strong></td>
+                            <td>~10 sec/MB</td>
+                            <td>At 30fps with default settings</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Roundtrip Accuracy</strong></td>
+                            <td>100%</td>
+                            <td>Bit-perfect recovery verified</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Processing Speed</strong></td>
+                            <td>~2-3 MB/min</td>
+                            <td>Depends on CPU and configuration</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <footer>
+            <p>YouTube Cloud Storage - Workflow Visualization</p>
+            <p>Version 0.3.0-beta | Last Updated: 2026-03-09</p>
+            <p>Built with ❤️ using steganography and fountain codes</p>
+        </footer>
+    </div>
+</body>
+</html>

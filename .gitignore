@@ -1,0 +1,186 @@
+# YouTube Cloud Storage - PHP/Laravel .gitignore
+
+## Composer and Dependencies
+/vendor/
+/composer.lock
+
+## Laravel Framework
+/.phpunit.result.cache
+/homestead.yaml
+/.vagrant/
+/Homestead.json
+/.homestead/
+/artisan.bak
+/storage/*.key
+storage/logs/laravel.log
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+!storage/framework/cache/.gitignore
+!storage/framework/sessions/.gitignore
+!storage/framework/views/.gitignore
+!.gitignore
+
+## Environment and Configuration
+.env
+.env.backup
+.env.production
+.env.local
+.env.*.local
+/.env
+npm-debug.log
+yarn-error.log
+
+## IDE and Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+.project
+.classpath
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+## Testing and Coverage
+/tests/_output/
+/.phpunit/
+/phpunit.xml
+.phpunit.result.cache
+coverage/
+.clover.xml
+/coverage/*
+!/coverage/.gitkeep
+.php_cs.cache
+.php_cs.dist
+
+## Build and Compilation
+/build/
+/dist/
+/vendor/
+node_modules/
+npm-debug.log
+yarn-error.log
+
+## Compiled Assets
+/public/hot
+/public/storage
+/public/mix-manifest.json
+*.js.map
+*.css.map
+
+## Temporary Files
+/tmp/
+/temp/
+*.tmp
+*.temp
+*.log
+logs/
+
+## Backup Files
+*.bak
+*.backup
+*.old
+
+## OS Generated Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+## Documentation Build Output
+/docs/_site/
+/docs/.jekyll-cache/
+/docs/.sass-cache/
+
+## Package-Specific Exclusions
+
+### Wirehair Compiled Binaries
+/src/Drivers/wirehair_build/
+*.so
+*.dll
+*.dylib
+*.a
+*.lib
+*.o
+
+### Test Fixtures and Generated Files
+/tests/fixtures/generated/
+/tests/fixtures/*.mp4
+/tests/fixtures/*.avi
+/tests/fixtures/*.mov
+!tests/fixtures/.gitkeep
+tests/output/
+tests/coverage/
+
+### OAuth and Credentials
+/oauth-credentials.json
+youtube-credentials.json
+*.pem
+*.key
+!config/youtube-storage.php
+
+### Binary Paths (Auto-detected)
+ffmpeg
+ffprobe
+yt-dlp
+wirehair.so
+wirehair.dll
+wirehair.dylib
+
+### Cache and Runtime
+.cache/
+.runtime/
+*.cache
+
+## Development Tools
+.phpstan/
+*.phpstan.result
+laravel.log
+
+## Debug Files
+dump.rdb
+*.debug
+
+## Large Media Files (Prevent Accidental Commits)
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.webm
+*.flv
+*.wmv
+*.m4v
+*.mpeg
+*.mpg
+!docs/assets/
+
+## Database Files
+*.sqlite
+*.sqlite3
+*.db
+database/database.sqlite
+
+## Uploaded Files (if any)
+/uploads/
+/downloads/
+
+## Performance Profiling
+*.xhprof
+*.cachegrind
+
+## Sentry and Error Tracking
+.sentry/
+
+## Local Development
+/.fleet
+/.idea-runConfigurations/
+
+## End of .gitignore

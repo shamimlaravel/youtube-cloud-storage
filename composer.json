@@ -1,0 +1,65 @@
+{
+    "name": "shamimstack/youtube-cloud-storage",
+    "description": "A Laravel 12 package that turns YouTube into a file storage backend using sign-bit nudging of DCT coefficients and Wirehair fountain codes.",
+    "keywords": [
+        "laravel",
+        "youtube",
+        "storage",
+        "steganography",
+        "dct",
+        "fountain-codes",
+        "wirehair",
+        "ffi"
+    ],
+    "license": "MIT",
+    "type": "library",
+    "require": {
+        "php": "^8.4",
+        "ext-ffi": "*",
+        "ext-gd": "*",
+        "laravel/framework": "^12.0",
+        "google/apiclient": "^2.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^10.0",
+        "phpunit/phpunit": "^11.0",
+        "phpstan/phpstan": "^1.10",
+        "laravel/pint": "^1.13"
+    },
+    "scripts": {
+        "test": "php run-tests.php",
+        "test:unit": "php run-tests.php --unit",
+        "test:integration": "php run-tests.php --integration",
+        "test:dct": "php run-tests.php --dct",
+        "test:coverage": "php run-tests.php --coverage",
+        "analyse": "vendor/bin/phpstan analyse",
+        "format": "vendor/bin/pint",
+        "cs-check": "vendor/bin/pint --test",
+        "setup": "php artisan yt:setup"
+    },
+    "autoload": {
+        "psr-4": {
+            "Shamimstack\\YouTubeCloudStorage\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Shamimstack\\YouTubeCloudStorage\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Shamimstack\\YouTubeCloudStorage\\YTStorageServiceProvider"
+            ],
+            "aliases": {
+                "YTStorage": "Shamimstack\\YouTubeCloudStorage\\Facades\\YTStorage"
+            }
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
